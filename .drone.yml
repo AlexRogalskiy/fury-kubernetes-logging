@@ -224,6 +224,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/e2e-test
       - refs/tags/**
 
 steps:
@@ -320,6 +321,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/e2e-test
       - refs/tags/**
 
 steps:
@@ -416,6 +418,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/e2e-test
       - refs/tags/**
 
 steps:
