@@ -141,7 +141,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/tags/**
 
 steps:
   - name: init
@@ -240,7 +239,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/tags/**
 
 steps:
   - name: init
@@ -339,7 +337,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/tags/**
 
 steps:
   - name: init
@@ -438,7 +435,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/tags/**
 
 steps:
   - name: init
@@ -523,12 +519,6 @@ volumes:
 kind: pipeline
 name: release
 
-depends_on:
-  - e2e-kubernetes-1.19
-  - e2e-kubernetes-1.20
-  - e2e-kubernetes-1.21
-  - e2e-kubernetes-1.22
-
 platform:
   os: linux
   arch: amd64
@@ -544,13 +534,11 @@ steps:
     pull: always
     depends_on: [ clone ]
     commands:
-      - spock build-json -m=fury-kubernetes-logging -r=False -v=${DRONE_TAG}
+      - spock module-json -m=fury-kubernetes-logging -r=False -v=${DRONE_TAG}
     when:
-      event:
+      ref:
         include:
           - refs/tags/**
-        exclude:
-          - refs/tags/v**-rc**
 
   - name: prepare-tar-gz
     image: alpine:latest
@@ -579,6 +567,7 @@ steps:
     image: plugins/github-release
     pull: always
     depends_on:
+      - prepare-canonical-json
       - prepare-tar-gz
       - prepare-release-notes
     settings:
@@ -587,6 +576,7 @@ steps:
       file_exists: overwrite
       files:
         - fury-kubernetes-logging-${DRONE_TAG}.tar.gz
+        - fury-kubernetes-logging-canonical-definition-${DRONE_TAG}.json
       prerelease: true
       overwrite: true
       title: "Preview ${DRONE_TAG}"
