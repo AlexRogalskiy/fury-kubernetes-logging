@@ -438,6 +438,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/increase_time
       - refs/tags/**
 
 steps:
